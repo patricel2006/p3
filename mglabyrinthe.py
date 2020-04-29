@@ -14,18 +14,53 @@ from mgconstantes import *
 pygame.init()
 
 # Ouverture de la fenêtre Pygame (carré : largeur = hauteur)
-fenetre = pygame.display.set_mode((cote_fenetre, cote_fenetre))
+fenetre = pygame.display.set_mode((COTE_FENETRE, COTE_FENETRE))
 # Icone
-icone = pygame.image.load(image_icone)
+icone = pygame.image.load(IMAGE_ICONE)
 pygame.display.set_icon(icone)
 # Titre
-pygame.display.set_caption(titre_fenetre)
+pygame.display.set_caption(TITRE_FENETRE)
+
+# fonction qui prend en charge la gestion des collusions :
+def is_wall(grille, x, y):
+    """is_wall renvoie True quand la case x,y de la grille est un mur, sinon False"""
+
+    # les coordonnées de MG doivent impérativement être de type entier :
+    x = int(x)
+    y = int(y)
+
+    # affichage de la grille et des coordonnées de MG :
+    print("Voici la grille telle que définie dans le fichier design :", grille)
+    print("coordonnée x de MG :", x)
+    print("coordonnée y de MG :", y)
+    print(grille[y][x])
+    if grille[y][x] != 'm':
+        return False
+    return True
+
+# fonction qui place les trois objets dans le labyrinthe :
+def put_objects(grille, x, y):
+    """put_objects répartit les trois objets dont MG a besoin, dans le labyrinthe"""
+
+    # initialisation des objets dans le labyrinthe :
+    position_objet1 = pygame.image.load(OBJET1).convert()
+    fenetre.blit(position_objet1, (8, 0))
+
+    #position_objet2 = pygame.image.load(OBJET2).convert()
+    #fenetre.blit(position_objet2, (x, y))
+    #pygame.display.flip()
+
+    #position_objet3 = pygame.image.load(OBJET3).convert()
+    #fenetre.blit(position_objet3, (x, y))
+    #pygame.display.flip()
+
+
 
 # BOUCLE PRINCIPALE
 continuer = 1
 while continuer:
     # Chargement et affichage de l'écran d'accueil
-    accueil = pygame.image.load(image_accueil).convert()
+    accueil = pygame.image.load(IMAGE_ACCUEIL).convert()
     fenetre.blit(accueil, (0, 0))
 
     # Rafraichissement
@@ -50,36 +85,38 @@ while continuer:
                 continuer_accueil = 0
                 continuer_jeu = 0
                 continuer = 0
-                # Variable de choix de quitter ou de jouer :
+                # Variable choix qui sera passée en paramètre à la méthode generer :
                 choix = 0
 
             elif event.type == KEYDOWN:
-                # Lancement du jeu :
+                # Lancement du jeu sur la touche espace :
                 if event.key == K_SPACE:
-                # continuer_accueil = 0  # On quitte l'accueil
-                # choix = 'design'  # On définit l'architecture du jeu dans un fichier
-                # if event.key == K_ESCAPE:
+                    # on quitte l'écran d'accueil :
                     continuer_accueil = 0
+                # On définit l'architecture du jeu dans un fichier texte :
                     choix = 'design'
     # on vérifie que le joueur a bien fait le choix de commencer à jouer
     # pour ne pas charger s'il quitte
     if choix != 0:
         # Chargement du fond
-        fond = pygame.image.load(image_fond).convert()
+        fond = pygame.image.load(IMAGE_FOND).convert()
         fenetre.blit(fond, (0, 0))
 
-        # Génération du design à partir d'un fichier design
-        niveau = Niveau(choix)  # choix a pris la valeur du fichier 'design' ligne 61
+        # l'architecture du labyrinthe est placé dans la variable niveau :
+        niveau = Niveau(choix)
         niveau.generer()
         niveau.afficher(fenetre)
 
-        # Création du personnage de Mac Gyver :
-        mg = pygame.image.load(image_icone).convert_alpha()
+        # initialisation de la variable mg qui va charger l'image image_icone definie dans les constantes :
+        mg = pygame.image.load(IMAGE_ICONE).convert_alpha()
+        # initialisation des coordonnées de MG qui sont également définies en constantes :
         x_mg = 0
         y_mg = 0
+        # affichage de l'image chargée de mg :
         fenetre.blit(mg, (x_mg, y_mg))
-
+        # limitation de la vitesse de
         pygame.time.Clock().tick(30)
+
 
         # BOUCLE DE JEU
         while continuer_jeu:
@@ -98,20 +135,44 @@ while continuer:
                         continuer_jeu = 0
 
                     # Touches de déplacement de Mac Gyver
-                    elif event.key == K_RIGHT:
-                        x_mg = x_mg + 30
-                    elif event.key == K_LEFT:
-                        x_mg = x_mg - 30
-                    elif event.key == K_UP:
-                        y_mg = y_mg - 30
-                    elif event.key == K_DOWN:
-                        y_mg = y_mg + 30
+                    elif event.key == K_RIGHT:   #and x_mg <= taille_cote_fenetre:
+                        if is_wall(niveau.structure, (x_mg + TAILLE_SPRITE )/TAILLE_SPRITE , (y_mg)/TAILLE_SPRITE ) == False:
+                            x_mg = x_mg + TAILLE_SPRITE
+
+                    elif event.key == K_LEFT:  # and x_mg <= 420:
+                        if is_wall(niveau.structure, (x_mg - TAILLE_SPRITE )/TAILLE_SPRITE , y_mg/TAILLE_SPRITE ) == False:
+                            x_mg = x_mg - TAILLE_SPRITE
+
+                    elif event.key == K_UP:  # and y_mg <= 420:
+                        if is_wall(niveau.structure, x_mg/TAILLE_SPRITE, (y_mg - TAILLE_SPRITE )/TAILLE_SPRITE ) == False:
+                            y_mg = y_mg - TAILLE_SPRITE
+
+                    elif event.key == K_DOWN:  # and y_mg <= 420:
+                        if is_wall(niveau.structure, x_mg/TAILLE_SPRITE, (y_mg + TAILLE_SPRITE )/TAILLE_SPRITE ) == False:
+                            y_mg = y_mg + TAILLE_SPRITE
+
+            
 
             fenetre.blit(fond, (0, 0))
             niveau.generer()
             niveau.afficher(fenetre)
             fenetre.blit(mg, (x_mg, y_mg))
             pygame.display.update()
+
+            put_objects(niveau.structure, x=2, y=0)
+            pygame.display.update()
+
+
+
+
+
+            #def deployer_objets(grille):
+                # with open(design, "r") as fichier:
+                    #grille = []
+                        #for ligne in fichier:
+
+
+
             # Victoire -> Retour à l'accueil
             #if niveau.structure[mg.case_y][mg.case_x] == 'a':
                 #continuer_jeu = 0

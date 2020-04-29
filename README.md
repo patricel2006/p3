@@ -1,2 +1,2 @@
-# p3
-code du projet3 openclassrooms 2020
+# projet3
+fichiers relatifs au projet 3 openclassrooms dev appli python

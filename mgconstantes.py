@@ -1,21 +1,27 @@
 """Constantes du jeu de Labyrinthe Mac Gyver"""
 
 #Paramètres de la fenêtre
-nombre_sprite_cote = 15
-taille_sprite = 30
-cote_fenetre = nombre_sprite_cote * taille_sprite
+NOMBRE_SPRITE_COTE = 15
+TAILLE_SPRITE = 30
+COTE_FENETRE = NOMBRE_SPRITE_COTE * TAILLE_SPRITE
 
 #Personnalisation de la fenêtre
-titre_fenetre = "Mac Gyver Labyrinthe"
-image_icone = "images/macgyver.png"
+TITRE_FENETRE = "Mac Gyver Labyrinthe"
+IMAGE_ICONE = "images/macgyver.png"
 
 #Listes des images du jeu
-image_accueil = "images/accueil.png"
-image_fond = "images/fond.jpg"
-image_mur = "images/mur.png"
-image_depart = "images/depart.png"
-image_arrivee = "images/gardien.png"
+IMAGE_ACCUEIL = "images/accueil.png"
+IMAGE_FOND = "images/fond.jpg"
+IMAGE_MUR = "images/mur.png"
+IMAGE_DEPART = "images/depart.png"
+IMAGE_ARRIVEE = "images/gardien.png"
+
+# liste des objets du jeu :
+OBJET1 = "images/ether.png"
+OBJET2 = "images/aiguille.png"
+OBJET3 = "images/tube_plastique.png"
 
 # coordonnées de MG :
 x_mg = 0
 y_mg = 0
+
