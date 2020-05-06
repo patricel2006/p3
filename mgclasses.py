@@ -8,14 +8,13 @@ from mgconstantes import *
 class Niveau:
     """Classe permettant de créer, puis d'afficher, la structure du labyrinthe"""
 
-    # methode initialisant les caracteristiques des objets de la classe Niveau :
+    # constructeur de la classe Niveau :
     def __init__(self, fichier):
         self.fichier = fichier
         self.structure = 0
 
     def generer(self):
-        """Méthode permettant de générer le niveau en fonction du fichier.
-        On crée une liste générale, contenant une liste de cases par ligne à afficher"""
+        """Méthode permettant de générer le niveau en fonction d'un fichier texte"""
         # On ouvre le fichier
         with open(self.fichier, "r") as fichier:
             # initialisation de ma grille sous forme de liste vide :

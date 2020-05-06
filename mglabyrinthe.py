@@ -15,12 +15,13 @@ from mgconstantes import *
 
 pygame.init()
 
-# Ouverture de la fenêtre Pygame (carré : largeur = hauteur)
+# initialisation de la fenêtre de jeu (carré de 15*15)
 fenetre = pygame.display.set_mode((COTE_FENETRE, COTE_FENETRE))
-# Icone
+# initialisation de l'image de MG :
 icone = pygame.image.load(IMAGE_ICONE)
+# affichage de l'image de MG :
 pygame.display.set_icon(icone)
-# Titre
+# initialisation du titre de la fenetre d'accueil :
 pygame.display.set_caption(TITRE_FENETRE)
 
 # fonction qui prend en charge la gestion des collusions :
@@ -38,13 +39,23 @@ def is_wall(grille, x, y):
     print(grille[y][x])
     if grille[y][x] != 'm':
         return False
-    #elif grille[y][x] != 'd':
-        #return False
-    #elif grille[y][x] != 'a':
-        #return False
     return True
 
-# BOUCLE PRINCIPALE
+def is_Depart(grille, x, y):
+    """is_Depart renvoie True quand la case x,y de la grille est la case Départ"""
+
+    x = int(x)
+    y = int(y)
+
+    print("Voici la grille telle que définie dans le fichier design :", grille)
+    print("coordonnées x de MG :", x)
+    print("coordonnées y de MG :", y)
+    print(grille[y][x])
+    if grille[y][x] != 'd':
+        return False
+    return True
+
+# Boucle principale :
 continuer = 1
 while continuer:
     # Chargement et affichage de l'écran d'accueil
@@ -73,7 +84,7 @@ while continuer:
                 continuer_accueil = 0
                 continuer_jeu = 0
                 continuer = 0
-                # Variable choix qui sera passée en paramètre à la méthode generer :
+                # Variable choix qui prendra la valeur du fichier design si la partie commence :
                 choix = 0
 
             elif event.type == KEYDOWN:
@@ -81,17 +92,18 @@ while continuer:
                 if event.key == K_SPACE:
                     # on quitte l'écran d'accueil :
                     continuer_accueil = 0
-                # On définit l'architecture du jeu dans un fichier texte :
+                # la variable choix contient maintenant l'architecture du labyrinthe dans un fichier texte :
                     choix = 'design'
     # on vérifie que le joueur a bien fait le choix de commencer à jouer
     # pour ne pas charger s'il quitte
-    if choix != 0:
+    if choix != 0:  # si le joueur choisit de commencer la partie
         # Chargement du fond
         fond = pygame.image.load(IMAGE_FOND).convert()
+        # affichage aux coordonnées 0,0 soit en haut à gauche de la fenetre de jeu :
         fenetre.blit(fond, (0, 0))
 
-        # l'architecture du labyrinthe est placé dans la variable niveau :
-        niveau = Niveau(choix)
+        # l'architecture du labyrinthe est placée dans la variable niveau :
+        niveau = Niveau(choix)  #
         niveau.generer()
         niveau.afficher(fenetre)
 
@@ -134,7 +146,7 @@ while continuer:
 
                     # Touches de déplacement de Mac Gyver
                     elif event.key == K_RIGHT:
-                        if is_wall(niveau.structure, (x_mg + TAILLE_SPRITE )/TAILLE_SPRITE , (y_mg)/TAILLE_SPRITE ) == False:
+                        if is_wall(niveau.structure, (x_mg + TAILLE_SPRITE)/TAILLE_SPRITE, (y_mg)/TAILLE_SPRITE) == False:
                             x_mg = x_mg + TAILLE_SPRITE
 
                     elif event.key == K_LEFT:
@@ -165,7 +177,7 @@ while continuer:
                 print("tirage x objet1 : ", xx)
                 print("tirage y objet1 : ", yy)
                 # Si le tirage n'est pas un mur alors on affiche l'objet1 :
-                if is_wall(niveau.structure, xx, yy) == False :
+                if is_wall(niveau.structure, xx, yy) == False and is_Depart(niveau.structure, xx, yy) == False:
                     objet1 = pygame.image.load(OBJET1).convert()
                     fenetre.blit(objet1, (xx * TAILLE_SPRITE, yy * TAILLE_SPRITE))
                     # sortie de la boucle :
@@ -184,7 +196,7 @@ while continuer:
                 print("tirage x objet2 : ", xxx)
                 print("tirage y objet2 : ", yyy)
                 # Si le tirage n'est pas un mur alors on affiche l'objet2 :
-                if is_wall(niveau.structure, xxx, yyy) == False :
+                if is_wall(niveau.structure, xxx, yyy) == False and is_Depart(niveau.structure, xxx, yyy) == False:
                     objet2 = pygame.image.load(OBJET2).convert()
                     fenetre.blit(objet2, (xxx * TAILLE_SPRITE, yyy * TAILLE_SPRITE))
                     # sortie de la boucle :
@@ -203,7 +215,7 @@ while continuer:
                 print("tirage x objet3 : ", xxxx)
                 print("tirage y objet3 : ", yyyy)
                 # Si le tirage n'est pas un mur alors on affiche l'objet3 :
-                if is_wall(niveau.structure, xxxx, yyyy) == False :
+                if is_wall(niveau.structure, xxxx, yyyy) == False and is_Depart(niveau.structure, xxxx, yyyy) == False:
                     objet3 = pygame.image.load(OBJET3).convert()
                     fenetre.blit(objet3, (xxxx * TAILLE_SPRITE, yyyy * TAILLE_SPRITE))
                     # sortie de la boucle :
