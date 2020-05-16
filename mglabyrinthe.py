@@ -12,8 +12,18 @@ from pygame.locals import *
 from mgclasses import *
 from mgconstantes import *
 
-
 pygame.init()
+
+x_objet1 = -1
+y_objet1 = -1
+
+x_objet2 = -1
+y_objet2 = -1
+
+x_objet3 = -1
+y_objet3 = -1
+
+compteur_objets = 0
 
 # initialisation de la fenêtre de jeu (carré de 15*15)
 fenetre = pygame.display.set_mode((COTE_FENETRE, COTE_FENETRE))
@@ -23,6 +33,7 @@ icone = pygame.image.load(IMAGE_ICONE)
 pygame.display.set_icon(icone)
 # initialisation du titre de la fenetre d'accueil :
 pygame.display.set_caption(TITRE_FENETRE)
+
 
 # fonction qui prend en charge la gestion des collusions :
 def is_wall(grille, x, y):
@@ -41,6 +52,7 @@ def is_wall(grille, x, y):
         return False
     return True
 
+
 def is_Depart(grille, x, y):
     """is_Depart renvoie True quand la case x,y de la grille est la case Départ"""
 
@@ -54,6 +66,32 @@ def is_Depart(grille, x, y):
     if grille[y][x] != 'd':
         return False
     return True
+
+def get_objects(grille, x, y):
+    """fonction qui gère la collecte des objets par MG"""
+
+    # coordonnées x et y de type entier :
+    x = int(x)
+    y = int(y)
+
+    print("Voici la grille telle que définie dans le fichier design :", grille)
+    print("coordonnées x de MG :", x)
+    print("coordonnées y de MG :", y)
+    print(grille[y][x])
+    if grille[x] == x_objet1 and grille[y] == y_objet1:
+        compteur_objets += 1
+        print(compteur_objets)
+        return True
+    if grille[x] == x_objet2 and grille[y] == y_objet2:
+        compteur_objets += 1
+        print(compteur_objets)
+        return True
+    if grille[x] == x_objet3 and grille[y] == y_objet3:
+        compteur_objets += 1
+        print(compteur_objets)
+        return True
+
+
 
 # Boucle principale :
 continuer = 1
@@ -92,7 +130,7 @@ while continuer:
                 if event.key == K_SPACE:
                     # on quitte l'écran d'accueil :
                     continuer_accueil = 0
-                # la variable choix contient maintenant l'architecture du labyrinthe dans un fichier texte :
+                    # la variable choix contient maintenant l'architecture du labyrinthe dans un fichier texte :
                     choix = 'design'
     # on vérifie que le joueur a bien fait le choix de commencer à jouer
     # pour ne pas charger s'il quitte
@@ -146,22 +184,28 @@ while continuer:
 
                     # Touches de déplacement de Mac Gyver
                     elif event.key == K_RIGHT:
-                        if is_wall(niveau.structure, (x_mg + TAILLE_SPRITE)/TAILLE_SPRITE, (y_mg)/TAILLE_SPRITE) == False:
+                        if is_wall(niveau.structure, (x_mg + TAILLE_SPRITE) / TAILLE_SPRITE,
+                                   (y_mg) / TAILLE_SPRITE) == False:
                             x_mg = x_mg + TAILLE_SPRITE
+                            # test pour savoir si la case contient un objet :
+                            if get_objects(niveau.structure, (x_mg)/TAILLE_SPRITE, (y_mg)/TAILLE_SPRITE) == True:
+                                print("Le nombre d'objets est égal à présent à : ", compteur_objets)
 
                     elif event.key == K_LEFT:
-                        if is_wall(niveau.structure, (x_mg - TAILLE_SPRITE )/TAILLE_SPRITE , y_mg/TAILLE_SPRITE ) == False:
+                        if is_wall(niveau.structure, (x_mg - TAILLE_SPRITE) / TAILLE_SPRITE,
+                                   y_mg / TAILLE_SPRITE) == False:
                             x_mg = x_mg - TAILLE_SPRITE
 
                     elif event.key == K_UP:
-                        if is_wall(niveau.structure, x_mg/TAILLE_SPRITE, (y_mg - TAILLE_SPRITE )/TAILLE_SPRITE ) == False:
+                        if is_wall(niveau.structure, x_mg / TAILLE_SPRITE,
+                                   (y_mg - TAILLE_SPRITE) / TAILLE_SPRITE) == False:
                             y_mg = y_mg - TAILLE_SPRITE
 
                     elif event.key == K_DOWN:
-                        if is_wall(niveau.structure, x_mg/TAILLE_SPRITE, (y_mg + TAILLE_SPRITE )/TAILLE_SPRITE ) == False:
+                        if is_wall(niveau.structure, x_mg / TAILLE_SPRITE,
+                                   (y_mg + TAILLE_SPRITE) / TAILLE_SPRITE) == False:
                             y_mg = y_mg + TAILLE_SPRITE
 
-            
             # rafraichissement du fond, du design du labyrinthe et de la position de MG :
             fenetre.blit(fond, (0, 0))
             niveau.generer()
@@ -171,58 +215,57 @@ while continuer:
             # boucle qui prend en charge le placement aléatoire de l'objet1 dans le labyrinthe :
             while boucle1 == True:
                 # tirage aléatoire des coordonnées x et y de objet1 :
-                xx = random.randint(0, 14)
-                yy = random.randint(0, 14)
+                x_objet1 = random.randint(0, 14)
+                y_objet1 = random.randint(0, 14)
                 # affichage du tirage :
-                print("tirage x objet1 : ", xx)
-                print("tirage y objet1 : ", yy)
+                print("tirage x objet1 : ", x_objet1)
+                print("tirage y objet1 : ", y_objet1)
                 # Si le tirage n'est pas un mur alors on affiche l'objet1 :
-                if is_wall(niveau.structure, xx, yy) == False and is_Depart(niveau.structure, xx, yy) == False:
+                if is_wall(niveau.structure, x_objet1, y_objet1) == False and is_Depart(niveau.structure, x_objet1, y_objet1) == False:
                     objet1 = pygame.image.load(OBJET1).convert()
-                    fenetre.blit(objet1, (xx * TAILLE_SPRITE, yy * TAILLE_SPRITE))
+                    fenetre.blit(objet1, (x_objet1 * TAILLE_SPRITE, y_objet1 * TAILLE_SPRITE))
                     # sortie de la boucle :
                     boucle1 = False
             # Une fois que le tirage est correct et après être sorti, chargement et affichage de l'objet1 :
             if boucle1 == False:
                 objet1 = pygame.image.load(OBJET1).convert()
-                fenetre.blit(objet1, (xx * TAILLE_SPRITE, yy * TAILLE_SPRITE))
+                fenetre.blit(objet1, (x_objet1 * TAILLE_SPRITE, y_objet1 * TAILLE_SPRITE))
 
             # boucle qui prend en charge le placement aléatoire de l'objet2 dans le labyrinthe :
             while boucle2 == True:
                 # tirage aléatoire des coordonnées x et y de objet2 :
-                xxx = random.randint(0, 14)
-                yyy = random.randint(0, 14)
+                x_objet2 = random.randint(0, 14)
+                y_objet2 = random.randint(0, 14)
                 # affichage du tirage :
-                print("tirage x objet2 : ", xxx)
-                print("tirage y objet2 : ", yyy)
+                print("tirage x objet2 : ", x_objet2)
+                print("tirage y objet2 : ", y_objet2)
                 # Si le tirage n'est pas un mur alors on affiche l'objet2 :
-                if is_wall(niveau.structure, xxx, yyy) == False and is_Depart(niveau.structure, xxx, yyy) == False:
+                if is_wall(niveau.structure, x_objet2, y_objet2) == False and is_Depart(niveau.structure, x_objet2, y_objet2) == False:
                     objet2 = pygame.image.load(OBJET2).convert()
-                    fenetre.blit(objet2, (xxx * TAILLE_SPRITE, yyy * TAILLE_SPRITE))
+                    fenetre.blit(objet2, (x_objet2 * TAILLE_SPRITE, y_objet2 * TAILLE_SPRITE))
                     # sortie de la boucle :
                     boucle2 = False
             # Une fois que le tirage est correct et après être sorti, chargement et affichage de l'objet2 :
             if boucle2 == False:
                 objet2 = pygame.image.load(OBJET2).convert()
-                fenetre.blit(objet2, (xxx * TAILLE_SPRITE, yyy * TAILLE_SPRITE))
+                fenetre.blit(objet2, (x_objet2 * TAILLE_SPRITE, y_objet2 * TAILLE_SPRITE))
 
             # boucle qui prend en charge le placement aléatoire de l'objet3 dans le labyrinthe :
             while boucle3 == True:
                 # tirage aléatoire des coordonnées x et y de l'objet3 :
-                xxxx = random.randint(0, 14)
-                yyyy = random.randint(0, 14)
+                x_objet3 = random.randint(0, 14)
+                y_objet3 = random.randint(0, 14)
                 # affichage du tirage :
-                print("tirage x objet3 : ", xxxx)
-                print("tirage y objet3 : ", yyyy)
+                print("tirage x objet3 : ", x_objet3)
+                print("tirage y objet3 : ", y_objet3)
                 # Si le tirage n'est pas un mur alors on affiche l'objet3 :
-                if is_wall(niveau.structure, xxxx, yyyy) == False and is_Depart(niveau.structure, xxxx, yyyy) == False:
+                if is_wall(niveau.structure, x_objet3, y_objet3) == False and is_Depart(niveau.structure, x_objet3, y_objet3) == False:
                     objet3 = pygame.image.load(OBJET3).convert()
-                    fenetre.blit(objet3, (xxxx * TAILLE_SPRITE, yyyy * TAILLE_SPRITE))
+                    fenetre.blit(objet3, (x_objet3 * TAILLE_SPRITE, y_objet3 * TAILLE_SPRITE))
                     # sortie de la boucle :
                     boucle3 = False
             # Une fois que le tirage est correct et après être sorti, chargement et affichage de l'objet3 :
             if boucle3 == False:
                 objet3 = pygame.image.load(OBJET3).convert()
-                fenetre.blit(objet3, (xxxx * TAILLE_SPRITE, yyyy * TAILLE_SPRITE))
+                fenetre.blit(objet3, (x_objet3 * TAILLE_SPRITE, y_objet3 * TAILLE_SPRITE))
             pygame.display.update()
-
