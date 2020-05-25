@@ -27,7 +27,7 @@ compteur_objets = 0
 
 # initialisation de la fenêtre de jeu (carré de 15*15)
 fenetre = pygame.display.set_mode((COTE_FENETRE, COTE_FENETRE))
-# initialisation de l'image de MG :
+# chargement de l'image de MG :
 icone = pygame.image.load(IMAGE_ICONE)
 # affichage de l'image de MG :
 pygame.display.set_icon(icone)
@@ -44,10 +44,10 @@ def is_wall(grille, x, y):
     y = int(y)
 
     # affichage de la grille et des coordonnées de MG :
-    print("Voici la grille telle que définie dans le fichier design :", grille)
-    print("coordonnée x de MG :", x)
-    print("coordonnée y de MG :", y)
-    print(grille[y][x])
+    #print("Voici la grille telle que définie dans le fichier design :", grille)
+    #print("coordonnée x de MG :", x)
+    #print("coordonnée y de MG :", y)
+    #print(grille[y][x])
     if grille[y][x] != 'm':
         return False
     return True
@@ -59,10 +59,10 @@ def is_Depart(grille, x, y):
     x = int(x)
     y = int(y)
 
-    print("Voici la grille telle que définie dans le fichier design :", grille)
-    print("coordonnées x de MG :", x)
-    print("coordonnées y de MG :", y)
-    print(grille[y][x])
+    #print("Voici la grille telle que définie dans le fichier design :", grille)
+    #print("coordonnées x de MG :", x)
+    #print("coordonnées y de MG :", y)
+    #print(grille[y][x])
     if grille[y][x] != 'd':
         return False
     return True
@@ -74,21 +74,24 @@ def get_objects(grille, x, y):
     x = int(x)
     y = int(y)
 
-    print("Voici la grille telle que définie dans le fichier design :", grille)
-    print("coordonnées x de MG :", x)
-    print("coordonnées y de MG :", y)
-    print(grille[y][x])
+    #print("Voici la grille telle que définie dans le fichier design :", grille)
+    #print("coordonnées x de MG :", x)
+    #print("coordonnées y de MG :", y)
+    #print(grille[y][x])
     if grille[x] == x_objet1 and grille[y] == y_objet1:
+        print("cette case contient un objet !")
         compteur_objets += 1
-        print(compteur_objets)
+        print("le nombre d'objet collecté est à présent de : ", compteur_objets)
         return True
     if grille[x] == x_objet2 and grille[y] == y_objet2:
+        print("cette case contient un objet !")
         compteur_objets += 1
-        print(compteur_objets)
+        print("le nombre d'objet collecté est à présent de : ", compteur_objets)
         return True
     if grille[x] == x_objet3 and grille[y] == y_objet3:
+        print("cette case contient un objet !")
         compteur_objets += 1
-        print(compteur_objets)
+        print("le nombre d'objet collecté est à présent de : ", compteur_objets)
         return True
 
 
@@ -100,7 +103,7 @@ while continuer:
     accueil = pygame.image.load(IMAGE_ACCUEIL).convert()
     fenetre.blit(accueil, (0, 0))
 
-    # Rafraichissement
+    # Rafraichissement de l'écran :
     pygame.display.flip()
 
     # On remet ces variables à 1 à chaque tour de boucle
@@ -133,16 +136,18 @@ while continuer:
                     # la variable choix contient maintenant l'architecture du labyrinthe dans un fichier texte :
                     choix = 'design'
     # on vérifie que le joueur a bien fait le choix de commencer à jouer
-    # pour ne pas charger s'il quitte
-    if choix != 0:  # si le joueur choisit de commencer la partie
+    # pour ne pas charger s'il choisit de quitter le jeu :
+    if choix != 0:
         # Chargement du fond
         fond = pygame.image.load(IMAGE_FOND).convert()
         # affichage aux coordonnées 0,0 soit en haut à gauche de la fenetre de jeu :
         fenetre.blit(fond, (0, 0))
 
         # l'architecture du labyrinthe est placée dans la variable niveau :
-        niveau = Niveau(choix)  #
+        niveau = Niveau(choix)
+        # chargement du niveau :
         niveau.generer()
+        # affichage du niveau à l'écran :
         niveau.afficher(fenetre)
 
         # initialisation de la variable mg qui va charger l'image image_icone definie dans les constantes :
@@ -154,7 +159,7 @@ while continuer:
         # affichage de l'image chargée de mg :
         fenetre.blit(mg, (x_mg, y_mg))
 
-        # limitation de la vitesse de rafraichissement :
+        # limitation de la vitesse de boucle :
         pygame.time.Clock().tick(30)
 
         # boucles qui gèrent le placement aléatoire des objets :
@@ -162,13 +167,9 @@ while continuer:
         boucle2 = True
         boucle3 = True
 
-        # initialisation des coordonnées des objets :
-        xx = -1
-        yy = -1
-
         # boucle qui gère la possibilité de quitter ou non le jeu :
         while continuer_jeu:
-
+            # attente des entrées utilisateur :
             for event in pygame.event.get():
 
                 # Si l'utilisateur quitte, on met la variable qui continue le jeu
@@ -184,10 +185,11 @@ while continuer:
 
                     # Touches de déplacement de Mac Gyver
                     elif event.key == K_RIGHT:
+                        # si la case n'est pas un mur, MG peut aller dessus :
                         if is_wall(niveau.structure, (x_mg + TAILLE_SPRITE) / TAILLE_SPRITE,
                                    (y_mg) / TAILLE_SPRITE) == False:
                             x_mg = x_mg + TAILLE_SPRITE
-                            # test pour savoir si la case contient un objet :
+                            # si la case contient un objet :
                             if get_objects(niveau.structure, (x_mg)/TAILLE_SPRITE, (y_mg)/TAILLE_SPRITE) == True:
                                 print("Le nombre d'objets est égal à présent à : ", compteur_objets)
 
@@ -195,16 +197,20 @@ while continuer:
                         if is_wall(niveau.structure, (x_mg - TAILLE_SPRITE) / TAILLE_SPRITE,
                                    y_mg / TAILLE_SPRITE) == False:
                             x_mg = x_mg - TAILLE_SPRITE
-
+                            if get_objects(niveau.structure, (x_mg)/TAILLE_SPRITE, (y_mg)/TAILLE_SPRITE) == True:
+                                print("Le nombre d'objets est égal à présent à : ", compteur_objets)
                     elif event.key == K_UP:
                         if is_wall(niveau.structure, x_mg / TAILLE_SPRITE,
                                    (y_mg - TAILLE_SPRITE) / TAILLE_SPRITE) == False:
                             y_mg = y_mg - TAILLE_SPRITE
-
+                            if get_objects(niveau.structure, (x_mg)/TAILLE_SPRITE, (y_mg)/TAILLE_SPRITE) == True:
+                                print("Le nombre d'objets est égal à présent à : ", compteur_objets)
                     elif event.key == K_DOWN:
                         if is_wall(niveau.structure, x_mg / TAILLE_SPRITE,
                                    (y_mg + TAILLE_SPRITE) / TAILLE_SPRITE) == False:
                             y_mg = y_mg + TAILLE_SPRITE
+                            if get_objects(niveau.structure, (x_mg)/TAILLE_SPRITE, (y_mg)/TAILLE_SPRITE) == True:
+                                print("Le nombre d'objets est égal à présent à : ", compteur_objets)
 
             # rafraichissement du fond, du design du labyrinthe et de la position de MG :
             fenetre.blit(fond, (0, 0))
@@ -218,8 +224,8 @@ while continuer:
                 x_objet1 = random.randint(0, 14)
                 y_objet1 = random.randint(0, 14)
                 # affichage du tirage :
-                print("tirage x objet1 : ", x_objet1)
-                print("tirage y objet1 : ", y_objet1)
+                #print("tirage x objet1 : ", x_objet1)
+                #print("tirage y objet1 : ", y_objet1)
                 # Si le tirage n'est pas un mur alors on affiche l'objet1 :
                 if is_wall(niveau.structure, x_objet1, y_objet1) == False and is_Depart(niveau.structure, x_objet1, y_objet1) == False:
                     objet1 = pygame.image.load(OBJET1).convert()
@@ -237,8 +243,8 @@ while continuer:
                 x_objet2 = random.randint(0, 14)
                 y_objet2 = random.randint(0, 14)
                 # affichage du tirage :
-                print("tirage x objet2 : ", x_objet2)
-                print("tirage y objet2 : ", y_objet2)
+                #print("tirage x objet2 : ", x_objet2)
+                #print("tirage y objet2 : ", y_objet2)
                 # Si le tirage n'est pas un mur alors on affiche l'objet2 :
                 if is_wall(niveau.structure, x_objet2, y_objet2) == False and is_Depart(niveau.structure, x_objet2, y_objet2) == False:
                     objet2 = pygame.image.load(OBJET2).convert()
@@ -256,8 +262,8 @@ while continuer:
                 x_objet3 = random.randint(0, 14)
                 y_objet3 = random.randint(0, 14)
                 # affichage du tirage :
-                print("tirage x objet3 : ", x_objet3)
-                print("tirage y objet3 : ", y_objet3)
+                #print("tirage x objet3 : ", x_objet3)
+                #print("tirage y objet3 : ", y_objet3)
                 # Si le tirage n'est pas un mur alors on affiche l'objet3 :
                 if is_wall(niveau.structure, x_objet3, y_objet3) == False and is_Depart(niveau.structure, x_objet3, y_objet3) == False:
                     objet3 = pygame.image.load(OBJET3).convert()
