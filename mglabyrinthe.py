@@ -14,6 +14,7 @@ from mgconstantes import *
 
 pygame.init()
 
+# initialisation des coordonnées des trois objets :
 x_objet1 = -1
 y_objet1 = -1
 
@@ -23,7 +24,10 @@ y_objet2 = -1
 x_objet3 = -1
 y_objet3 = -1
 
-compteur_objets = 0
+# booléens qui serviront à determiner si les objets ont été ou non collectés :
+bool_objet1 = False
+bool_objet2 = False
+bool_objet3 = False
 
 # initialisation de la fenêtre de jeu (carré de 15*15)
 fenetre = pygame.display.set_mode((COTE_FENETRE, COTE_FENETRE))
@@ -74,30 +78,37 @@ def get_objects(grille, x, y):
     x = int(x)
     y = int(y)
 
-    #print("Voici la grille telle que définie dans le fichier design :", grille)
-    #print("coordonnées x de MG :", x)
-    #print("coordonnées y de MG :", y)
-    #print(grille[y][x])
-    if grille[x] == x_objet1 and grille[y] == y_objet1:
-        print("cette case contient un objet !")
-        compteur_objets += 1
-        print("le nombre d'objet collecté est à présent de : ", compteur_objets)
-        return True
-    if grille[x] == x_objet2 and grille[y] == y_objet2:
-        print("cette case contient un objet !")
-        compteur_objets += 1
-        print("le nombre d'objet collecté est à présent de : ", compteur_objets)
-        return True
-    if grille[x] == x_objet3 and grille[y] == y_objet3:
-        print("cette case contient un objet !")
-        compteur_objets += 1
-        print("le nombre d'objet collecté est à présent de : ", compteur_objets)
-        return True
+    print("McGyver X", x)
+    print("McGyver Y", y)
 
+    print(x_objet1)
+    print(y_objet1)
+
+    print(x_objet2)
+    print(y_objet2)
+
+    print(x_objet3)
+    print(y_objet3)
+
+    if (x == x_objet1 and y == y_objet1) == True:
+        print("cette case contient un objet !")
+        bool_objet1 = True
+        return True
+    if (x == x_objet2 and y == y_objet2) == True:
+        print("cette case contient un objet !")
+        bool_objet2 = True
+        return True
+    if (x == x_objet3 and y == y_objet3) == True:
+        print("cette case contient un objet !")
+        bool_objet3 = True
+        return True
+    return False
 
 
 # Boucle principale :
 continuer = 1
+compteur_objets = 0
+
 while continuer:
     # Chargement et affichage de l'écran d'accueil
     accueil = pygame.image.load(IMAGE_ACCUEIL).convert()
@@ -191,25 +202,35 @@ while continuer:
                             x_mg = x_mg + TAILLE_SPRITE
                             # si la case contient un objet :
                             if get_objects(niveau.structure, (x_mg)/TAILLE_SPRITE, (y_mg)/TAILLE_SPRITE) == True:
+                                compteur_objets = compteur_objets + 1
                                 print("Le nombre d'objets est égal à présent à : ", compteur_objets)
+                                if bool_objet1 == True:
+                                    # mettre un blanc dans la case de l'objet1
+                                elif bool_objet2 == True:
+                                    # mettre un blanc dans la case de l'objet2
+                                elif bool_objet3 == True:
+                                    # mettre un blanc dans la case de l'objet3
 
                     elif event.key == K_LEFT:
                         if is_wall(niveau.structure, (x_mg - TAILLE_SPRITE) / TAILLE_SPRITE,
                                    y_mg / TAILLE_SPRITE) == False:
                             x_mg = x_mg - TAILLE_SPRITE
                             if get_objects(niveau.structure, (x_mg)/TAILLE_SPRITE, (y_mg)/TAILLE_SPRITE) == True:
+                                compteur_objets = compteur_objets + 1
                                 print("Le nombre d'objets est égal à présent à : ", compteur_objets)
                     elif event.key == K_UP:
                         if is_wall(niveau.structure, x_mg / TAILLE_SPRITE,
                                    (y_mg - TAILLE_SPRITE) / TAILLE_SPRITE) == False:
                             y_mg = y_mg - TAILLE_SPRITE
                             if get_objects(niveau.structure, (x_mg)/TAILLE_SPRITE, (y_mg)/TAILLE_SPRITE) == True:
+                                compteur_objets = compteur_objets + 1
                                 print("Le nombre d'objets est égal à présent à : ", compteur_objets)
                     elif event.key == K_DOWN:
                         if is_wall(niveau.structure, x_mg / TAILLE_SPRITE,
                                    (y_mg + TAILLE_SPRITE) / TAILLE_SPRITE) == False:
                             y_mg = y_mg + TAILLE_SPRITE
                             if get_objects(niveau.structure, (x_mg)/TAILLE_SPRITE, (y_mg)/TAILLE_SPRITE) == True:
+                                compteur_objets = compteur_objets + 1
                                 print("Le nombre d'objets est égal à présent à : ", compteur_objets)
 
             # rafraichissement du fond, du design du labyrinthe et de la position de MG :
