@@ -5,7 +5,7 @@ from pygame.locals import *
 from mgconstantes import *
 
 
-class Niveau:
+class Niveau(object):
     """Classe permettant de créer, puis d'afficher, la structure du labyrinthe"""
 
     # constructeur de la classe Niveau :
@@ -35,7 +35,7 @@ class Niveau:
 
     def afficher(self, fenetre):
         """Méthode permettant d'afficher le niveau en fonction
-        de la liste de structure renvoyée par generer()"""
+        de la structure renvoyée par la méthode generer()"""
         # Chargement des images (seule celle d'arrivée contient de la transparence)
         mur = pygame.image.load(IMAGE_MUR).convert()
         depart = pygame.image.load(IMAGE_DEPART).convert()
@@ -65,12 +65,10 @@ class Niveau:
             num_ligne += 1
 
 
-class Perso:
+class Perso(object):
     """Classe permettant de créer le personnage de Mac Gyver"""
 
     def __init__(self, niveau):
-        # Sprites du personnage
-        #self.mg = pygame.image.load("images/macgyver.png").convert_alpha()
         # Position du personnage en cases et en pixels
         self.case_x = 0
         self.case_y = 0

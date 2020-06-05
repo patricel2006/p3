@@ -12,6 +12,7 @@ IMAGE_ICONE = "images/macgyver.png"
 #Listes des images du jeu
 IMAGE_ACCUEIL = "images/accueil.png"
 IMAGE_FOND = "images/fond.jpg"
+IMAGE_SPRITE = "images/fond_sprite.jpg"
 IMAGE_MUR = "images/mur.png"
 IMAGE_DEPART = "images/depart.png"
 IMAGE_ARRIVEE = "images/gardien.png"

@@ -47,11 +47,6 @@ def is_wall(grille, x, y):
     x = int(x)
     y = int(y)
 
-    # affichage de la grille et des coordonnées de MG :
-    #print("Voici la grille telle que définie dans le fichier design :", grille)
-    #print("coordonnée x de MG :", x)
-    #print("coordonnée y de MG :", y)
-    #print(grille[y][x])
     if grille[y][x] != 'm':
         return False
     return True
@@ -63,10 +58,6 @@ def is_Depart(grille, x, y):
     x = int(x)
     y = int(y)
 
-    #print("Voici la grille telle que définie dans le fichier design :", grille)
-    #print("coordonnées x de MG :", x)
-    #print("coordonnées y de MG :", y)
-    #print(grille[y][x])
     if grille[y][x] != 'd':
         return False
     return True
@@ -204,12 +195,16 @@ while continuer:
                             if get_objects(niveau.structure, (x_mg)/TAILLE_SPRITE, (y_mg)/TAILLE_SPRITE) == True:
                                 compteur_objets = compteur_objets + 1
                                 print("Le nombre d'objets est égal à présent à : ", compteur_objets)
-                                if bool_objet1 == True:
+                                fond_sprite = pygame.image.load(IMAGE_SPRITE).convert()
+                                fenetre.blit(fond_sprite, (x_mg, y_mg))
+                                pygame.display.flip()
+                                #if bool_objet1 == True:
                                     # mettre un blanc dans la case de l'objet1
-                                elif bool_objet2 == True:
+                                #elif bool_objet2 == True:
                                     # mettre un blanc dans la case de l'objet2
-                                elif bool_objet3 == True:
+                                #elif bool_objet3 == True:
                                     # mettre un blanc dans la case de l'objet3
+                                    #pass
 
                     elif event.key == K_LEFT:
                         if is_wall(niveau.structure, (x_mg - TAILLE_SPRITE) / TAILLE_SPRITE,
