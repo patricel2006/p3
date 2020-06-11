@@ -26,3 +26,6 @@ OBJET3 = "images/tube_plastique.png"
 x_mg = 0
 y_mg = 0
 
+# coordonnées case arrivée :
+x_fin = 14
+y_fin = 14

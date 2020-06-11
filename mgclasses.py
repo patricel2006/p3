@@ -5,7 +5,7 @@ from pygame.locals import *
 from mgconstantes import *
 
 
-class Niveau(object):
+class Niveau:
     """Classe permettant de créer, puis d'afficher, la structure du labyrinthe"""
 
     # constructeur de la classe Niveau :
@@ -65,17 +65,4 @@ class Niveau(object):
             num_ligne += 1
 
 
-class Perso(object):
-    """Classe permettant de créer le personnage de Mac Gyver"""
-
-    def __init__(self, niveau):
-        # Position du personnage en cases et en pixels
-        self.case_x = 0
-        self.case_y = 0
-        self.x = 0
-        self.y = 0
-        # Direction par défaut
-        self.direction = self.droite
-        # Niveau dans lequel le personnage se trouve
-        self.niveau = niveau
 
