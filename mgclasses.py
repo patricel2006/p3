@@ -9,9 +9,10 @@ class Niveau:
     """Classe permettant de créer, puis d'afficher, la structure du labyrinthe"""
 
     # constructeur de la classe Niveau :
-    def __init__(self, fichier):
+    def __init__(self, fichier, gardien):
         self.fichier = fichier
         self.structure = 0
+        self.gardien = gardien
 
     def generer(self):
         """Méthode permettant de générer le niveau en fonction d'un fichier texte"""
@@ -39,7 +40,7 @@ class Niveau:
         # Chargement des images (seule celle d'arrivée contient de la transparence)
         mur = pygame.image.load(IMAGE_MUR).convert()
         depart = pygame.image.load(IMAGE_DEPART).convert()
-        arrivee = pygame.image.load(IMAGE_ARRIVEE).convert_alpha()
+        Niveau.gardien = pygame.image.load(IMAGE_ARRIVEE).convert_alpha()
 
         # On parcourt toute la grille : lignes + colonnes :
         # initialisation du numéro de ligne à zéro :
@@ -60,7 +61,7 @@ class Niveau:
                     # je colle l'image du départ sur la case qui convient :
                     fenetre.blit(depart, (x, y))
                 elif sprite == 'a':  # a = Arrivée
-                    fenetre.blit(arrivee, (x, y))
+                    fenetre.blit(Niveau.gardien, (x, y))
                 num_case += 1
             num_ligne += 1
 

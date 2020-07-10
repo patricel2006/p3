@@ -11,8 +11,8 @@ class Object:
         self.name = name
 
 
-objet1 = Object(2, 2, None ,False, "monsuperobjet")
-print(objet1.name)
-print(objet1.x, objet1.y)
-print(objet1.kept)
-print(objet1.image)
+#objet1 = Object(x_objet1, y_objet1, None, False, "monsuperobjet")
+#print(objet1.name)
+#print(x_objet1, y_objet1)
+#print(objet1.kept)
+#print(objet1.image)
