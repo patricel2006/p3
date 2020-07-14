@@ -141,12 +141,13 @@ while continuer:
         # affichage du niveau à l'écran :
         niveau.afficher(fenetre)
 
-
-        # initialisation de la variable mg qui va charger l'image image_icone definie dans les constantes :
-        mg = pygame.image.load(IMAGE_ICONE).convert_alpha()
+        # instanciation de l'objet mg :
+        mg = Perso(0, 0, IMAGE_ICONE)
+        # chargement de l'image image_icone definie dans les constantes :
+        mg.image = pygame.image.load(IMAGE_ICONE).convert_alpha()
 
         # affichage de l'image chargée de mg :
-        fenetre.blit(mg, (x_mg, y_mg))
+        fenetre.blit(mg.image, (mg.x, mg.y))
 
         # limitation de la vitesse de boucle :
         pygame.time.Clock().tick(30)
@@ -210,7 +211,7 @@ while continuer:
             fenetre.blit(fond, (0, 0))
             niveau.generer()
             niveau.afficher(fenetre)
-            fenetre.blit(mg, (x_mg, y_mg))
+            fenetre.blit(mg.image, (x_mg, y_mg))
 
             # boucle qui prend en charge le placement aléatoire de l'objet1 dans le labyrinthe :
             if objet1.kept == False:
