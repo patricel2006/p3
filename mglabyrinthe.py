@@ -141,10 +141,10 @@ while continuer:
         # affichage du niveau à l'écran :
         niveau.afficher(fenetre)
 
+        # chargement de l'image de MG :
+        imageMG = pygame.image.load(IMAGE_ICONE).convert_alpha()
         # instanciation de l'objet mg :
-        mg = Perso(0, 0, IMAGE_ICONE)
-        # chargement de l'image image_icone definie dans les constantes :
-        mg.image = pygame.image.load(IMAGE_ICONE).convert_alpha()
+        mg = Perso(0, 0, imageMG)
 
         # affichage de l'image chargée de mg :
         fenetre.blit(mg.image, (mg.x, mg.y))
